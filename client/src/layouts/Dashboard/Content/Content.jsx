@@ -1,8 +1,18 @@
 import styles from "./Content.module.scss";
 
-export default function Content({ title, description, children }) {
+export default function Content({
+  id,
+  className,
+  title,
+  description,
+  children
+}) {
+  const classes = [className, styles.ccontent].join(" ");
+
   return (
-    <div className={styles.content}>
+    <div
+      id={id}
+      className={classes}>
       {(title || description) && (
         <div className={styles.header}>
           {title && <h1>{title}</h1>}
