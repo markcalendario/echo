@@ -6,9 +6,10 @@
 }
 
 p,
-a {
+a,
+label {
   font-size: 14px;
-  color: colors.$slate-7;
+  color: colors.$slate-2;
 }
 
 h1,
@@ -17,7 +18,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: colors.$slate-8;
+  color: colors.$slate-1;
 }
 
 a {

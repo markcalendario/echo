@@ -1,0 +1,26 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+
+.input {
+  label {
+    font-weight: bold;
+  }
+
+  input {
+    margin-top: 5px;
+    padding: 7px;
+    width: 100%;
+    border: 0;
+    border-radius: 3px;
+    background-color: transparent;
+    color: colors.$white;
+    outline: 1px solid colors.$slate-5;
+
+    &:focus {
+      outline: 2px solid colors.$primary;
+    }
+
+    &::placeholder {
+      color: colors.$slate-5;
+    }
+  }
+}
