@@ -1,0 +1,9 @@
+@use "../../../styles/utils/responsive" as responsive;
+
+.main {
+  padding: 20px;
+
+  .container {
+    @include responsive.container;
+  }
+}

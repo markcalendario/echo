@@ -1,0 +1,95 @@
+@use "../../../styles/abstracts/variables-colors" as colors;
+@use "../../../styles/utils/responsive" as responsive;
+@use "../../../styles/utils/mixins-screens" as screens;
+@use "../../../styles/utils/mixins-shadows" as shadows;
+
+.navbar {
+  grid-area: navbar;
+  background-color: colors.$slate-8;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  @include shadows.shadow-md;
+
+  .container {
+    @include responsive.fluid-container;
+  }
+
+  .wrapper {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+
+    img {
+      width: 30px;
+    }
+
+    span {
+      font-size: x-large;
+      font-weight: bold;
+      color: colors.$white;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      img {
+        width: 30px;
+        border-radius: 50%;
+      }
+
+      span {
+        color: colors.$white;
+        display: none;
+      }
+    }
+
+    .burger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: block;
+
+      i {
+        font-size: large;
+        color: colors.$primary;
+      }
+    }
+  }
+}
+
+@include screens.tabletAndDesktop {
+  .navbar {
+    .container {
+      .wrapper {
+        .right {
+          .user {
+            span {
+              display: block;
+            }
+          }
+
+          .burger {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

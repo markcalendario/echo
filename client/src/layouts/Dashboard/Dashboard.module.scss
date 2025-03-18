@@ -1,0 +1,20 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+@use "../../styles/utils/mixins-screens" as screens;
+
+.dashboard {
+  display: grid;
+  grid-template-areas:
+    "navbar"
+    "main";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+}
+
+@include screens.tabletAndDesktop {
+  .dashboard {
+    grid-template-areas: "navbar navbar" "sidebar main";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto;
+  }
+}
