@@ -1,10 +1,10 @@
 import Button from "@/components/Button/Button.jsx";
 import Input from "@/components/Input/Input.jsx";
-import styles from "./Register.module.scss";
+import styles from "./SignIn.module.scss";
 
-export default function SignUpPage() {
+export default function SignInPage() {
   return (
-    <section className={styles.signUp}>
+    <section className={styles.signIn}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
           <div className={styles.box}>
@@ -13,14 +13,9 @@ export default function SignUpPage() {
                 src="/assets/logo/primary.svg"
                 alt="echo"
               />
-              <h1 className={styles.title}>Join Echo today</h1>
+              <h1 className={styles.title}>Sign in to Echo</h1>
             </div>
             <form>
-              <Input
-                id="username"
-                name="username"
-                placeholder="Username"
-              />
               <Input
                 id="email"
                 name="email"
@@ -32,15 +27,11 @@ export default function SignUpPage() {
                 type="password"
                 placeholder="Password"
               />
-              <p>
-                By clicking Sign Up, you are agreeing to Echo's Terms of Service
-                and are acknowledging our Privacy Notice applies.
-              </p>
-              <Button>Sign Up</Button>
+              <Button>Sign In</Button>
               <a
-                className={styles.signInBtn}
-                href="/">
-                Have an account? Sign in
+                className={styles.signUpBtn}
+                href="/signup">
+                Don't have an account? Sign up
               </a>
             </form>
           </div>
