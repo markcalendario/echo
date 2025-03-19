@@ -14,25 +14,9 @@ export default function VideoStream({ className }) {
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  useEffect(() => {
-    if (videoRef.current && Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
-      hls.attachMedia(videoRef.current);
-    } else if (videoRef.current?.canPlayType("application/vnd.apple.mpegurl")) {
-      videoRef.current.src = "https://example.com/stream.m3u8";
-    }
-
-    // Detect fullscreen changes
-    const handleFullscreenChange = () => {
-      setIsFullscreen(document.fullscreenElement !== null);
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
+  const handleFullscreenChange = () => {
+    setIsFullscreen(document.fullscreenElement !== null);
+  };
 
   const togglePlayPause = () => {
     if (!videoRef.current) return;
@@ -43,20 +27,20 @@ export default function VideoStream({ className }) {
   const handleVolumeChange = (event) => {
     const newVolume = parseFloat(event.target.value);
     setVolume(newVolume);
-    if (videoRef.current) {
-      videoRef.current.volume = newVolume;
-    }
+
+    if (!videoRef.current) return;
+    videoRef.current.volume = newVolume;
   };
 
   const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
   };
 
   const enterFullscreen = () => {
     if (!containerRef.current) return;
+
     if (containerRef.current.requestFullscreen) {
       containerRef.current.requestFullscreen();
     } else if (containerRef.current.webkitRequestFullscreen) {
@@ -79,6 +63,27 @@ export default function VideoStream({ className }) {
       document.msExitFullscreen();
     }
   };
+
+  useEffect(() => {
+    // Supported HLS
+    if (videoRef.current && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
+      hls.attachMedia(videoRef.current);
+    }
+    // Fallback for not supported HLS
+    else if (videoRef.current?.canPlayType("application/vnd.apple.mpegurl")) {
+      videoRef.current.src = "https://example.com/stream.m3u8";
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   return (
     <div
