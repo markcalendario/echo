@@ -1,3 +1,4 @@
+import usersSchema from "#src/schema/users.schema.js";
 import Joi from "joi";
 import { isEmailRegistered, isUsernameRegistered } from "./auth.utils.js";
 
@@ -5,8 +6,8 @@ export async function validateRegister(req, res, next) {
   const schema = Joi.object({
     username: Joi.string()
       .alphanum()
-      .min(4)
-      .max(10)
+      .min(usersSchema.username.min)
+      .max(usersSchema.username.max)
       .required()
       .external(async (username, helper) => {
         if (await isUsernameRegistered(username)) {
@@ -18,6 +19,7 @@ export async function validateRegister(req, res, next) {
 
     email: Joi.string()
       .email()
+      .max(usersSchema.email.max)
       .required()
       .external(async (email, helper) => {
         if (await isEmailRegistered(email)) {
@@ -27,7 +29,10 @@ export async function validateRegister(req, res, next) {
         return email;
       }),
 
-    password: Joi.string().min(8).max(100).required()
+    password: Joi.string()
+      .min(usersSchema.password.min)
+      .max(usersSchema.password.max)
+      .required()
   });
 
   try {
