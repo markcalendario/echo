@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "#prisma/*": ["./prisma/*"],
+      "#src/*": ["./src/*"]
+    }
+  }
+}

@@ -15,11 +15,17 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "bcrypt": "^5.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",
     "express": "^4.21.2",
+    "joi": "^17.13.3",
     "nodemon": "^3.1.9"
   },
-  "type": "module"
+  "type": "module",
+  "imports": {
+    "#prisma/*": "./prisma/*",
+    "#src/*": "./src/*"
+  }
 }
