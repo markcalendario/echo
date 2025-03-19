@@ -6,16 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prod": "cross-env NODE_ENV=produdction nodemon index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js"
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "prisma:pull:dev": "dotenv -e .env.development -- npx prisma db pull",
+    "prisma:generate:dev": "dotenv -e .env.development -- prisma generate",
+    "prisma:migrate:dev": "dotenv -e .env.development -- prisma migrate dev"
   },
   "author": "Mark Kenneth Calendario",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.5.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "express": "^4.21.2",
-    "nodemon": "^3.1.9",
-    "prisma": "^6.5.0"
+    "nodemon": "^3.1.9"
   },
   "type": "module"
 }

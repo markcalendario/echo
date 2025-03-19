@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id       BigInt @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
+  email    String @unique(map: "email_UNIQUE") @db.VarChar(100)
+  username String @unique(map: "userName_UNIQUE") @db.VarChar(10)
+  password String @db.VarChar(100)
+}
