@@ -5,6 +5,7 @@ import { isEmailRegistered, isUsernameRegistered } from "./auth.utils.js";
 export async function validatePostRegister(req, res, next) {
   const schema = Joi.object({
     username: Joi.string()
+      .trim()
       .alphanum()
       .min(usersSchema.username.min)
       .max(usersSchema.username.max)
@@ -18,6 +19,7 @@ export async function validatePostRegister(req, res, next) {
       }),
 
     email: Joi.string()
+      .trim()
       .email()
       .max(usersSchema.email.max)
       .required()
@@ -30,6 +32,7 @@ export async function validatePostRegister(req, res, next) {
       }),
 
     password: Joi.string()
+      .trim()
       .min(usersSchema.password.min)
       .max(usersSchema.password.max)
       .required()
@@ -38,10 +41,53 @@ export async function validatePostRegister(req, res, next) {
   try {
     req.body = await schema.validateAsync(req.body);
     next();
-  } catch (error) {
-    return res.status(400).json({
+  } catch (e) {
+    if (e instanceof Joi.ValidationError) {
+      return res.status(400).send({
+        isSuccess: false,
+        message: e?.details[0]?.message
+      });
+    }
+
+    return res.status(500).json({
       success: false,
-      message: error.details ? error.details[0].message : error.message
+      message: "Error. Cannot validate registration request."
+    });
+  }
+}
+
+export async function validatePostLogin(req, res, next) {
+  const schema = Joi.object({
+    username: Joi.string()
+      .trim()
+      .alphanum()
+      .min(usersSchema.username.min)
+      .max(usersSchema.username.max)
+      .required()
+      .external(async (value, helpers) => {
+        if (await isUsernameRegistered(value)) {
+          return helpers.message("Username is not registered.");
+        }
+
+        return value;
+      }),
+    password: Joi.string().trim().required()
+  });
+
+  try {
+    req.body = await schema.validateAsync(req.body);
+    next();
+  } catch (e) {
+    if (e instanceof Joi.ValidationError) {
+      return res.status(400).send({
+        isSuccess: false,
+        message: e?.details[0]?.message
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Error. Cannot validate login request."
     });
   }
 }
