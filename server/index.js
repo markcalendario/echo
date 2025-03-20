@@ -1,10 +1,12 @@
 import Routes from "#src/api/api.routes.js";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
 const app = express();
 
 // Configurations
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
