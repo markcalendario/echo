@@ -1,7 +1,7 @@
 import prisma from "#prisma/prisma.js";
 import { hashPassword } from "./auth.utils.js";
 
-export async function handleRegister(req, res) {
+export async function handlePostRegister(req, res) {
   const { username, email, password } = req.body;
   console.log(email);
 

@@ -2,7 +2,7 @@ import usersSchema from "#src/schema/users.schema.js";
 import Joi from "joi";
 import { isEmailRegistered, isUsernameRegistered } from "./auth.utils.js";
 
-export async function validateRegister(req, res, next) {
+export async function validatePostRegister(req, res, next) {
   const schema = Joi.object({
     username: Joi.string()
       .alphanum()
