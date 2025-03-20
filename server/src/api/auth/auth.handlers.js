@@ -20,7 +20,6 @@ export async function handlePostSignUp(req, res) {
       message: "You registered successfully."
     });
   } catch (e) {
-    console.error(e);
     return res.status(500).send({
       success: false,
       message: "Error. Registration failed."
@@ -49,7 +48,7 @@ export async function handlePostSignIn(req, res) {
   const storedPassword = user.password;
 
   if (!user || !isPasswordCorrect(password, storedPassword)) {
-    return res.status(401).send({
+    return res.send({
       success: false,
       message: "Invalid credentials."
     });

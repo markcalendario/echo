@@ -43,7 +43,7 @@ export async function validatePostSignUp(req, res, next) {
     next();
   } catch (e) {
     if (e instanceof Joi.ValidationError) {
-      return res.status(400).send({
+      return res.send({
         isSuccess: false,
         message: e?.details[0]?.message
       });
@@ -79,7 +79,7 @@ export async function validatePostSignIn(req, res, next) {
     next();
   } catch (e) {
     if (e instanceof Joi.ValidationError) {
-      return res.status(400).send({
+      return res.send({
         isSuccess: false,
         message: e?.details[0]?.message
       });
