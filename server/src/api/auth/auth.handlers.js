@@ -1,4 +1,5 @@
 import prisma from "#prisma/prisma.js";
+import { verifyAuthToken } from "#src/globals/auth/auth.utils.js";
 import {
   generateAuthToken,
   hashPassword,
@@ -67,4 +68,16 @@ export async function handleSignOut(req, res) {
   return res
     .clearCookie("auth")
     .send({ success: true, message: "You signed out successfully." });
+}
+
+export async function handleGetAuth(req, res) {
+  const isAuthenticated = verifyAuthToken(req.cookies?.auth);
+
+  if (!isAuthenticated) res.clearCookie("auth");
+
+  return res.send({
+    success: true,
+    message: "Authentication fetched successfully.",
+    isAuthenticated
+  });
 }

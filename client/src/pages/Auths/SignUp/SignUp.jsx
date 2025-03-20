@@ -1,8 +1,17 @@
 import Button from "@/components/Button/Button.jsx";
 import Input from "@/components/Input/Input.jsx";
+import PublicRoute from "@/route-protections/PublicRoute.jsx";
 import styles from "./SignUp.module.scss";
 
 export default function SignUpPage() {
+  return (
+    <PublicRoute authorizedPath="/me">
+      <SignUp />
+    </PublicRoute>
+  );
+}
+
+function SignUp() {
   return (
     <section className={styles.signUp}>
       <div className={styles.container}>

@@ -12,8 +12,9 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 // Middleware to handle CORS
 app.use((req, res, next) => {
-  const client = process.env.CLIENT;
+  const client = process.env.CLIENT_URL;
   res.header("Access-Control-Allow-Origin", client);
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 

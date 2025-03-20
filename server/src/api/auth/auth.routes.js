@@ -4,6 +4,7 @@ import {
 } from "#src/globals/auth/auth.middlewares.js";
 import express from "express";
 import {
+  handleGetAuth,
   handlePostSignIn,
   handlePostSignUp,
   handleSignOut
@@ -11,6 +12,7 @@ import {
 import { validatePostSignIn, validatePostSignUp } from "./auth.middlewares.js";
 const router = express.Router();
 
+router.get("/", handleGetAuth);
 router.post("/sign-up", publicRoute, validatePostSignUp, handlePostSignUp);
 router.post("/sign-in", publicRoute, validatePostSignIn, handlePostSignIn);
 router.post("/sign-out", signedInRoute, handleSignOut);

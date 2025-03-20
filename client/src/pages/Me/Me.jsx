@@ -1,13 +1,16 @@
 import VideoStream from "@/components/VideoStream/VideoStream.jsx";
 import Content from "@/layouts/Dashboard/Content/Content.jsx";
 import Dashboard from "@/layouts/Dashboard/Dashboard.jsx";
+import SignedInRoute from "@/route-protections/SignedInRoute.jsx";
 import styles from "./Me.module.scss";
 
 export default function Me() {
   return (
-    <Dashboard>
-      <MyStream />
-    </Dashboard>
+    <SignedInRoute unauthorizedPath="/">
+      <Dashboard>
+        <MyStream />
+      </Dashboard>
+    </SignedInRoute>
   );
 }
 
