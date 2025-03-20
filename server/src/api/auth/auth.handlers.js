@@ -63,3 +63,9 @@ export async function handlePostSignIn(req, res) {
     .cookie("auth", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
     .send({ success: true, message: "You signed in successfully." });
 }
+
+export async function handleSignOut(req, res) {
+  return res
+    .clearCookie("auth")
+    .send({ success: true, message: "You signed out successfully." });
+}
