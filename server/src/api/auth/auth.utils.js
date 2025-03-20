@@ -23,7 +23,7 @@ export function isPasswordCorrect(guess, stored) {
   return bcrypt.compareSync(guess, stored);
 }
 
-export async function generateAuthToken(userID) {
+export function generateAuthToken(userID) {
   const payload = { userID: userID };
   const secret = process.env.AUTH_SECRET_TOKEN;
   const options = { expiresIn: "1d" };

@@ -65,7 +65,7 @@ export async function validatePostLogin(req, res, next) {
       .max(usersSchema.username.max)
       .required()
       .external(async (value, helpers) => {
-        if (await isUsernameRegistered(value)) {
+        if (!(await isUsernameRegistered(value))) {
           return helpers.message("Username is not registered.");
         }
 

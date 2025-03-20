@@ -57,7 +57,7 @@ export async function handlePostLogin(req, res) {
 
   // Auth Token Generation
 
-  const token = generateAuthToken(user.id);
+  const token = generateAuthToken(user.id.toString());
 
   return res
     .cookie("auth", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
