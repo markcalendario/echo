@@ -17,7 +17,10 @@ export default function Me() {
 function MyStream() {
   return (
     <Content className={styles.myStream}>
-      <VideoStream className={styles.videoStream} />
+      <VideoStream
+        className={styles.videoStream}
+        status="live"
+      />
     </Content>
   );
 }

@@ -1,9 +1,10 @@
 import useStreamer from "@/hooks/useStreamer.jsx";
 import { useRef } from "react";
 import { Controls } from "./Controls/Controls.jsx";
+import StreamStatusTab from "./StreamStatusTab/StreamStatusTab.jsx";
 import styles from "./VideoStream.module.scss";
 
-export default function VideoStream({ className }) {
+export default function VideoStream({ className, status }) {
   const classes = [className, styles.videoStream].join(" ");
 
   const videoRef = useRef(null);
@@ -21,6 +22,8 @@ export default function VideoStream({ className }) {
         autoPlay
         muted
       />
+
+      <StreamStatusTab status={status} />
 
       <Controls
         videoRef={videoRef}
