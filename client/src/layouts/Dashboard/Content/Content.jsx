@@ -7,7 +7,7 @@ export default function Content({
   description,
   children
 }) {
-  const classes = [className, styles.ccontent].join(" ");
+  const classes = [className, styles.content].filter(Boolean).join(" ");
 
   return (
     <div

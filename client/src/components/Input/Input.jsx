@@ -6,7 +6,8 @@ export default function Input({
   value,
   name,
   type,
-  onChange
+  onChange,
+  disabled
 }) {
   return (
     <div className={styles.input}>
@@ -18,6 +19,7 @@ export default function Input({
         onChange={onChange}
         className={styles.input}
         placeholder={placeholder}
+        disabled={disabled}
       />
     </div>
   );

@@ -22,5 +22,10 @@
     &::placeholder {
       color: colors.$slate-5;
     }
+
+    &:disabled {
+      user-select: none;
+      color: colors.$primary-variant;
+    }
   }
 }
