@@ -8,3 +8,8 @@ export function verifyAuthToken(authToken) {
     return false;
   }
 }
+
+export function getUserIDFromAuthToken(authCookie) {
+  const decoded = jwt.decode(authCookie);
+  return decoded?.userID;
+}
