@@ -44,7 +44,7 @@ export async function validatePostSignUp(req, res, next) {
   } catch (e) {
     if (e instanceof Joi.ValidationError) {
       return res.send({
-        isSuccess: false,
+        success: false,
         message: e?.details[0]?.message
       });
     }
@@ -80,7 +80,7 @@ export async function validatePostSignIn(req, res, next) {
   } catch (e) {
     if (e instanceof Joi.ValidationError) {
       return res.send({
-        isSuccess: false,
+        success: false,
         message: e?.details[0]?.message
       });
     }
