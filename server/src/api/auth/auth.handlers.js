@@ -5,7 +5,7 @@ import {
   isPasswordCorrect
 } from "./auth.utils.js";
 
-export async function handlePostRegister(req, res) {
+export async function handlePostSignUp(req, res) {
   const { username, email, password } = req.body;
 
   const hashedPassword = hashPassword(password);
@@ -28,7 +28,7 @@ export async function handlePostRegister(req, res) {
   }
 }
 
-export async function handlePostLogin(req, res) {
+export async function handlePostSignIn(req, res) {
   const { username, password } = req.body;
 
   // Password Validation
