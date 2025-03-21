@@ -2,7 +2,11 @@ import prisma from "#prisma/prisma.js";
 import { getUserIDFromAuthToken } from "#src/globals/auth/auth.utils.js";
 import streamsSchema from "#src/schema/streams.schema.js";
 import { getStreamData } from "#src/socket-events/streams.utils.js";
-import { generateStreamKey, getUserIDFromStreamKey } from "./streams.utils.js";
+import {
+  generateInvalidStreamKey,
+  generateStreamKey,
+  getUserIDFromStreamKey
+} from "./streams.utils.js";
 
 export async function handleGetStreamKey(req, res) {
   const userID = getUserIDFromAuthToken(req.cookies.auth);
@@ -85,7 +89,10 @@ export async function handlePostEnd(req, res) {
     // Update the status of the stream to "OFFLINE"
     await prisma.streams.update({
       where: { userID: streamerID },
-      data: { status: streamsSchema.status.allowedValues[0], key: "" }
+      data: {
+        status: streamsSchema.status.allowedValues[0],
+        key: generateInvalidStreamKey()
+      }
     });
 
     // Emit the stream data to the streamer's socket
