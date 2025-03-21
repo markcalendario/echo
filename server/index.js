@@ -1,29 +1,19 @@
-import Routes from "#src/api/api.routes.js";
-import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import express from "express";
-const app = express();
+import { createServer } from "node:http";
+import intializeServer from "./configs/server.config.js";
+import initializeSocketIO from "./configs/socketIO.config.js";
+const expressServer = express();
+const app = createServer(expressServer);
 
-// Configurations
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
+// Environment Variables
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-// Middleware to handle CORS
-app.use((req, res, next) => {
-  const client = process.env.CLIENT_URL;
+// Server Configuration (Express)
+intializeServer(expressServer);
 
-  res.header("Access-Control-Allow-Origin", client);
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-
-  next();
-});
-
-// Routes
-app.use("/", Routes);
+// Socket Configuration (Socket.io)
+initializeSocketIO(app);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
