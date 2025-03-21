@@ -13,3 +13,15 @@ model users {
   username String @unique(map: "userName_UNIQUE") @db.VarChar(10)
   password String @db.VarChar(100)
 }
+
+model streams {
+  id     BigInt         @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
+  userID BigInt         @unique(map: "userID_UNIQUE") @db.UnsignedBigInt
+  key    String         @db.Text
+  status streams_status
+}
+
+enum streams_status {
+  STREAMING
+  OFFLINE
+}
