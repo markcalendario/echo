@@ -1,5 +1,5 @@
 export default {
   userID: {},
   key: {},
-  status: { allowedValues: ["STREAMING", "OFFLINE"] }
+  status: { allowedValues: ["OFFLINE", "STREAMING"] }
 };

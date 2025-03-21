@@ -7,17 +7,11 @@
 }
 
 .streamManager {
-  form {
-    padding: 20px;
-    border-radius: 3px;
-    background-color: colors.$slate-8;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    button {
-      align-self: baseline;
-    }
+  button {
+    align-self: baseline;
   }
 }

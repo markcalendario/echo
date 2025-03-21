@@ -7,12 +7,12 @@ export default function Content({
   description,
   children
 }) {
-  const classes = [className, styles.content].filter(Boolean).join(" ");
+  const classes = [className, styles.wrapper].filter(Boolean).join(" ");
 
   return (
     <div
       id={id}
-      className={classes}>
+      className={styles.content}>
       {(title || description) && (
         <div className={styles.header}>
           {title && <h1>{title}</h1>}
@@ -20,7 +20,7 @@ export default function Content({
         </div>
       )}
 
-      <div className={styles.wrapper}>{children}</div>
+      <div className={classes}>{children}</div>
     </div>
   );
 }
