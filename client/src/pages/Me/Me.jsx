@@ -39,7 +39,7 @@ function MyStream() {
     <Fragment>
       <Content className={styles.myStream}>
         <VideoStream
-          userID={userID}
+          streamerID={userID}
           className={styles.videoStream}
         />
       </Content>

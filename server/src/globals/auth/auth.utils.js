@@ -9,7 +9,7 @@ export function verifyAuthToken(authToken) {
   }
 }
 
-export function getUserIDFromAuthToken(authCookie) {
-  const decoded = jwt.decode(authCookie);
+export function getUserIDFromAuthToken(validAuthCookie) {
+  const decoded = jwt.decode(validAuthCookie);
   return decoded?.userID;
 }

@@ -1,21 +1,17 @@
-import prisma from "#prisma/prisma.js";
+import { getStreamData } from "./streams.utils.js";
 
-export default function streamEvents(socket) {
-  socket.on("get-stream-data", async (userID) => {
-    socket.join(userID);
+export default function streamEvents(io) {
+  io.on("connection", (socket) => {
+    // Get Stream Data
+    socket.on("get-stream-data", async (streamerID) => {
+      socket.join(streamerID);
 
-    try {
-      const stream = await prisma.streams.findUnique({ where: { userID } });
-      const ingest = `${process.env.INGEST_URL}/${stream.key}`;
-
-      socket.emit("get-stream-data", {
-        ingest: ingest,
-        key: stream.key,
-        status: stream.status,
-        userID: stream.userID.toString()
-      });
-    } catch {
-      console.error("Error retrieving stream data for user:", userID);
-    }
+      try {
+        const data = await getStreamData(streamerID);
+        io.to(streamerID).emit("get-stream-data", data);
+      } catch {
+        console.error("Error retrieving stream data for user:", streamerID);
+      }
+    });
   });
 }
