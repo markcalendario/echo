@@ -6,21 +6,25 @@
   top: 10px;
   right: 10px;
 
-  .live,
-  .offline {
+  .LIVE,
+  .OFFLINE {
     padding: 5px 10px;
     border-radius: 3px;
     font-size: small;
     user-select: none;
-    text-transform: capitalize;
+    text-transform: lowercase;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 
-  .live {
+  .LIVE {
     background-color: colors.$red;
     animation: liveAnimation 5s infinite ease;
   }
 
-  .offline {
+  .OFFLINE {
     background-color: colors.$slate-5;
   }
 }

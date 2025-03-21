@@ -1,11 +1,11 @@
-import prisma from "#prisma/prisma.js";
 import { getUserIDFromAuthToken } from "#src/globals/auth/auth.utils.js";
+import { getUserData } from "./users.utils.js";
 
 export async function handleGetUsername(req, res) {
   const userID = getUserIDFromAuthToken(req.cookies.auth);
 
   try {
-    const user = await prisma.users.findUnique({ where: { id: userID } });
+    const user = await getUserData(userID);
     return res.send({
       success: true,
       username: user.username,

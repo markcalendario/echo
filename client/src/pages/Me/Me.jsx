@@ -6,7 +6,7 @@ import Dashboard from "@/layouts/Dashboard/Dashboard.jsx";
 import SignedInRoute from "@/route-protections/SignedInRoute.jsx";
 import fetchAPI from "@/utils/fetch.js";
 import { showErrorToast, showSuccessToast } from "@/utils/toast.js";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import styles from "./Me.module.scss";
 
 export default function Me() {
@@ -20,12 +20,28 @@ export default function Me() {
 }
 
 function MyStream() {
+  const [streamData, setStreamData] = useState(null);
+
+  const fetchMyStream = async () => {
+    const config = { method: "GET", credentials: "include" };
+    const response = await fetchAPI("/streams/my-stream", config);
+    setStreamData(response.stream);
+  };
+
+  useEffect(() => {
+    fetchMyStream();
+  }, []);
+
+  if (streamData === null) return;
+
   return (
     <Fragment>
       <Content className={styles.myStream}>
         <VideoStream
+          userID={streamData.userID}
+          status={streamData.status}
+          ingest={streamData.ingest}
           className={styles.videoStream}
-          status="live"
         />
       </Content>
 
