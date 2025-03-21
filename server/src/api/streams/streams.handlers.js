@@ -69,10 +69,38 @@ export async function handlePostStart(req, res) {
       success: true,
       message: "Stream started successfully."
     });
-  } catch (e) {
+  } catch {
     return res.status(500).send({
       success: false,
       message: "Error. Failed to start stream."
+    });
+  }
+}
+
+export async function handlePostEnd(req, res) {
+  const streamKey = req.body.name;
+  const streamerID = getUserIDFromStreamKey(streamKey);
+
+  try {
+    // Update the status of the stream to "OFFLINE"
+    await prisma.streams.update({
+      where: { userID: streamerID },
+      data: { status: streamsSchema.status.allowedValues[0], key: "" }
+    });
+
+    // Emit the stream data to the streamer's socket
+    const streamData = await getStreamData(streamerID);
+    const io = req.app.get("io");
+    io.to(streamerID).emit("get-stream-data", streamData);
+
+    return res.status(200).send({
+      success: true,
+      message: "Stream ended successfully."
+    });
+  } catch {
+    return res.status(500).send({
+      success: false,
+      message: "Error. Failed to end the stream."
     });
   }
 }

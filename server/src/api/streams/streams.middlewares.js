@@ -1,9 +1,8 @@
 import Joi from "joi";
 import { isStreamKeyValid } from "./streams.utils.js";
 
-export default function validatePostStart(req, res, next) {
+export default function validateStreamKey(req, res, next) {
   const streamKey = req.body.name;
-  console.log(streamKey);
 
   const schema = Joi.string()
     .trim()
