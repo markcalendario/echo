@@ -11,7 +11,7 @@ export default function usePlayPause(videoRef) {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isPlaying) video.play();
+    if (!isPlaying) video.play();
     else video.pause();
   }, [isPlaying]);
 
