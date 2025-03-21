@@ -18,3 +18,12 @@ export async function handleGetUsername(req, res) {
     });
   }
 }
+
+export async function handleGetID(req, res) {
+  const userID = getUserIDFromAuthToken(req.cookies.auth);
+  return res.send({
+    success: true,
+    userID: userID,
+    message: "User's ID retrieved successfully."
+  });
+}

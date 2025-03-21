@@ -28,31 +28,3 @@ export async function handleGetStreamKey(req, res) {
     });
   }
 }
-
-export async function handleGetMyStream(req, res) {
-  const userID = getUserIDFromAuthToken(req.cookies.auth);
-
-  try {
-    const stream = await prisma.streams.findUnique({
-      where: { userID }
-    });
-
-    const ingest = `${process.env.INGEST_URL}/${stream.key}`;
-
-    return res.send({
-      success: true,
-      message: "Stream fetched successfully.",
-      stream: {
-        ingest: ingest,
-        key: stream.key,
-        status: stream.status,
-        userID: stream.userID.toString()
-      }
-    });
-  } catch {
-    return res.status(500).send({
-      success: false,
-      message: "Error. Failed to get your stream."
-    });
-  }
-}

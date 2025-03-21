@@ -22,6 +22,6 @@ model streams {
 }
 
 enum streams_status {
-  STREAMING
+  LIVE
   OFFLINE
 }

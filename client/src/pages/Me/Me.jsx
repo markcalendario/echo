@@ -20,27 +20,26 @@ export default function Me() {
 }
 
 function MyStream() {
-  const [streamData, setStreamData] = useState(null);
+  const [userID, setUserID] = useState(null);
 
   const fetchMyStream = async () => {
     const config = { method: "GET", credentials: "include" };
-    const response = await fetchAPI("/streams/my-stream", config);
-    setStreamData(response.stream);
+    const response = await fetchAPI("/users/id", config);
+
+    setUserID(response.userID);
   };
 
   useEffect(() => {
     fetchMyStream();
   }, []);
 
-  if (streamData === null) return;
+  if (userID === null) return;
 
   return (
     <Fragment>
       <Content className={styles.myStream}>
         <VideoStream
-          userID={streamData.userID}
-          status={streamData.status}
-          ingest={streamData.ingest}
+          userID={userID}
           className={styles.videoStream}
         />
       </Content>

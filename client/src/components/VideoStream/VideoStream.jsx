@@ -1,30 +1,33 @@
 import useStreamer from "@/hooks/useStreamer.jsx";
+import socket from "@/utils/socket.io.js";
 import { useEffect, useRef, useState } from "react";
 import { Controls } from "./Controls/Controls.jsx";
 import StreamStatusTab from "./StreamStatusTab/StreamStatusTab.jsx";
 import styles from "./VideoStream.module.scss";
 
-export default function VideoStream({
-  className,
-  userID,
-  status: initialStatus,
-  ingest: initialIngest
-}) {
-  const [currentStatus, setCurrentStatus] = useState(initialStatus);
-  const [currentIngest, setCurrentIngest] = useState(initialIngest);
+export default function VideoStream({ className, userID }) {
+  const [status, setCurrentStatus] = useState("OFFLINE");
+  const [ingest, setCurrentIngest] = useState("");
 
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  useStreamer(videoRef, currentIngest);
+  useStreamer(videoRef, ingest);
 
   const classes = [className, styles.videoStream].filter(Boolean).join(" ");
 
+  const handleOnStreamEvent = (streamData) => {
+    setCurrentStatus(streamData.status);
+    setCurrentIngest(streamData.ingest);
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      setCurrentStatus("LIVE");
-      setCurrentIngest("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
-    }, 3000);
-  }, []);
+    socket.emit("get-stream-data", userID);
+    socket.on("get-stream-data", (streamData) =>
+      handleOnStreamEvent(streamData)
+    );
+
+    return () => socket.off("stream");
+  }, [status, ingest]);
 
   return (
     <div
@@ -37,11 +40,11 @@ export default function VideoStream({
         muted
       />
 
-      <StreamStatusTab status={currentStatus} />
+      <StreamStatusTab status={status} />
 
       <Controls
         videoRef={videoRef}
-        status={currentStatus}
+        status={status}
         containerRef={containerRef}
       />
     </div>

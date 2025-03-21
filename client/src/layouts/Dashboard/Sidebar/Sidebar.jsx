@@ -54,7 +54,6 @@ function LiveChannelList() {
     });
 
     setLiveChannels(data);
-    console.log(data);
   };
 
   useEffect(() => {
