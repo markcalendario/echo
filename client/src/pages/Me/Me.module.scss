@@ -1,8 +1,11 @@
 @use "../../styles/abstracts/variables-colors" as colors;
 
-.myStream {
+.preview {
+  padding-top: 0;
+
   .videoStream {
-    margin: auto;
+    border-radius: 0;
+    aspect-ratio: 16/6;
   }
 }
 

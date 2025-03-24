@@ -47,8 +47,6 @@ function LiveStreamerList() {
   const fetchLiveStreamers = async () => {
     const config = { credentials: "include" };
     const response = await fetchAPI("/streams/live-streamers", config);
-    console.log(response);
-
     setLiveStreamers(response.liveStreamers);
   };
 

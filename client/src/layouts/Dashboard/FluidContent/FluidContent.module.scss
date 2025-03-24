@@ -1,8 +1,7 @@
 @use "../../../styles/utils/responsive" as responsive;
 
-.content {
+.fluidContent {
   padding: 30px 0;
-  @include responsive.container;
 
   .header {
     margin-bottom: 15px;

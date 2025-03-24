@@ -2,10 +2,10 @@ import styles from "./Content.module.scss";
 
 export default function Content({
   id,
-  className,
   title,
-  description,
-  children
+  children,
+  className,
+  description
 }) {
   const classes = [className, styles.wrapper].filter(Boolean).join(" ");
 

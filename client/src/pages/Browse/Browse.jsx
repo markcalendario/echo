@@ -38,10 +38,10 @@ function Browse() {
       {echoes.map((echo) => (
         <VideoStreamAnchor
           status={echo.status}
-          to={echo.streamerID}
           key={echo.streamerID}
           className={styles.stream}
           hlsPlayback={echo.hlsPlayback}
+          to={`/echo/${echo.streamerID}`}
         />
       ))}
     </Content>

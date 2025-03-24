@@ -1,13 +1,8 @@
 @use "../../../styles/utils/responsive" as responsive;
 
 .main {
-  padding: 20px;
-
   .container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-
-    @include responsive.container;
   }
 }

@@ -3,6 +3,7 @@ import Input from "@/components/Input/Input.jsx";
 import VideoStream from "@/components/VideoStream/VideoStream.jsx";
 import Content from "@/layouts/Dashboard/Content/Content.jsx";
 import Dashboard from "@/layouts/Dashboard/Dashboard.jsx";
+import FluidContent from "@/layouts/Dashboard/FluidContent/FluidContent.jsx";
 import SignedInRoute from "@/route-protections/SignedInRoute.jsx";
 import fetchAPI from "@/utils/fetch.js";
 import socket from "@/utils/socket.io.js";
@@ -21,6 +22,15 @@ export default function Me() {
 }
 
 function MyStream() {
+  return (
+    <Fragment>
+      <StreamPreview />
+      <StreamManager />
+    </Fragment>
+  );
+}
+
+function StreamPreview() {
   const [userID, setUserID] = useState(null);
   const [streamData, setStreamData] = useState(null);
 
@@ -47,17 +57,13 @@ function MyStream() {
   if (streamData === null) return;
 
   return (
-    <Fragment>
-      <Content className={styles.myStream}>
-        <VideoStream
-          status={streamData.status}
-          className={styles.videoStream}
-          hlsPlayback={streamData.hlsPlayback}
-        />
-      </Content>
-
-      <StreamManager />
-    </Fragment>
+    <FluidContent contentClassName={styles.preview}>
+      <VideoStream
+        status={streamData.status}
+        className={styles.videoStream}
+        hlsPlayback={streamData.hlsPlayback}
+      />
+    </FluidContent>
   );
 }
 

@@ -5,10 +5,10 @@ import StreamStatusTab from "./StreamStatusTab/StreamStatusTab.jsx";
 import styles from "./VideoStream.module.scss";
 
 export default function VideoStream({
-  className,
-  hideControls,
   status,
-  hlsPlayback
+  className,
+  hlsPlayback,
+  hideControls
 }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
