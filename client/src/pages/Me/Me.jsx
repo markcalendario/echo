@@ -22,10 +22,7 @@ export default function Me() {
 
 function MyStream() {
   const [userID, setUserID] = useState(null);
-  const [streamData, setStreamData] = useState({
-    status: null,
-    hlsPlayback: null
-  });
+  const [streamData, setStreamData] = useState(null);
 
   const fetchMyStream = async () => {
     const config = { method: "GET", credentials: "include" };
@@ -39,13 +36,15 @@ function MyStream() {
   }, []);
 
   useEffect(() => {
+    if (userID === null) return;
+
     socket.emit("get-stream-data", userID);
     socket.on("get-stream-data", (streamData) => setStreamData(streamData));
 
     return () => socket.off("stream");
   }, [userID]);
 
-  if (userID === null) return;
+  if (streamData === null) return;
 
   return (
     <Fragment>
