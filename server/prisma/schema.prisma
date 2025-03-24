@@ -8,10 +8,11 @@ datasource db {
 }
 
 model users {
-  id       BigInt @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
-  email    String @unique(map: "email_UNIQUE") @db.VarChar(100)
-  username String @unique(map: "userName_UNIQUE") @db.VarChar(10)
-  password String @db.VarChar(100)
+  id       BigInt   @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
+  email    String   @unique(map: "email_UNIQUE") @db.VarChar(100)
+  username String   @unique(map: "userName_UNIQUE") @db.VarChar(10)
+  password String   @db.VarChar(100)
+  streams  streams?
 }
 
 model streams {
@@ -19,6 +20,7 @@ model streams {
   userID BigInt         @unique(map: "userID_UNIQUE") @db.UnsignedBigInt
   key    String         @db.Text
   status streams_status
+  users  users          @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkStreamsUsers")
 }
 
 enum streams_status {

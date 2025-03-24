@@ -1,6 +1,7 @@
 import { signedInRoute } from "#src/globals/auth/auth.middlewares.js";
 import express from "express";
 import {
+  handleGetLiveStreamers,
   handleGetLiveStreams,
   handleGetStreamKey,
   handlePostEnd,
@@ -13,6 +14,8 @@ import {
 const router = express.Router();
 
 router.get("/live", signedInRoute, handleGetLiveStreams);
+
+router.get("/live-streamers", signedInRoute, handleGetLiveStreamers);
 
 router.get(
   "/stream-key",

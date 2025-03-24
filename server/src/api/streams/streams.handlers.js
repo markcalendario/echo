@@ -143,3 +143,34 @@ export async function handleGetLiveStreams(req, res) {
     });
   }
 }
+
+export async function handleGetLiveStreamers(req, res) {
+  try {
+    const streamers = await prisma.streams.findMany({
+      where: {
+        status: streamsSchema.status.allowedValues[1]
+      },
+      include: {
+        users: true
+      }
+    });
+
+    const data = streamers.map((streamer, id) => {
+      return {
+        streamerID: streamer.id.toString(),
+        username: streamer.users.username
+      };
+    });
+
+    return res.send({
+      success: true,
+      message: "Live streamers retrieved successfully.",
+      liveStreamers: data
+    });
+  } catch {
+    return res.status(500).send({
+      success: false,
+      message: "Error. Failed to get live streamers."
+    });
+  }
+}

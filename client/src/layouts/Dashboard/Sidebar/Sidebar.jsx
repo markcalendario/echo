@@ -1,3 +1,5 @@
+import EmptySection from "@/components/EmptySection/EmptySection.jsx";
+import fetchAPI from "@/utils/fetch.js";
 import { useEffect, useState } from "react";
 import styles from "./Sidebar.module.scss";
 
@@ -33,59 +35,52 @@ export default function Sidebar() {
         </a>
       ))}
 
-      <h1>Live Channels</h1>
-      <LiveChannelList />
+      <h1>Live Streamers</h1>
+      <LiveStreamerList />
     </aside>
   );
 }
 
-function LiveChannelList() {
-  const [liveChannels, setLiveChannels] = useState([]);
+function LiveStreamerList() {
+  const [liveStreamers, setLiveStreamers] = useState([]);
 
-  const fetchLiveChannels = async () => {
-    const request = await fetch("https://randomuser.me/api?results=5&nat=us");
-    const { results } = await request.json();
+  const fetchLiveStreamers = async () => {
+    const config = { credentials: "include" };
+    const response = await fetchAPI("/streams/live-streamers", config);
+    console.log(response);
 
-    const data = results.map((value, faw) => {
-      return {
-        userName: value.login.username,
-        avatar: value.picture.thumbnail
-      };
-    });
-
-    setLiveChannels(data);
+    setLiveStreamers(response.liveStreamers);
   };
 
   useEffect(() => {
-    fetchLiveChannels();
+    fetchLiveStreamers();
   }, []);
 
-  if (!liveChannels.length) return null;
+  if (!liveStreamers.length) return <EmptySection />;
 
   return (
-    <div className={styles.liveChannels}>
-      {liveChannels.map((channel, index) => (
-        <LiveChannel
+    <div className={styles.liveStreamers}>
+      {liveStreamers.map((streamer, index) => (
+        <LiveStreamer
           key={index}
-          {...channel}
+          {...streamer}
         />
       ))}
     </div>
   );
 }
 
-function LiveChannel({ avatar, userName }) {
+function LiveStreamer({ streamerID, username }) {
   return (
     <a
-      href={`/${userName}`}
-      className={styles.liveChannel}>
+      href={`/echo/${streamerID}`}
+      className={styles.liveStreamer}>
       <img
-        src={avatar}
-        alt={`${userName} avatar`}
+        src={`/assets/images/misc/default-profile.jpg`}
+        alt={`${username}`}
       />
       <div className={styles.details}>
-        <span className={styles.userName}>{userName}</span>
-        <span className={styles.streamTag}>Valorant</span>
+        <span className={styles.userName}>{username}</span>
       </div>
     </a>
   );
