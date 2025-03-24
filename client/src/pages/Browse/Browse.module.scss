@@ -1,0 +1,24 @@
+@use "../../styles/utils/mixins-screens" as screens;
+
+.echoes {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+
+  .stream {
+    width: 100%;
+  }
+}
+
+@include screens.tabletAndDesktop {
+  .echoes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+
+    .stream {
+      width: calc((100% - (20px * 2)) / 3);
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import prisma from "#prisma/prisma.js";
 import { getUserIDFromAuthToken } from "#src/globals/auth/auth.utils.js";
 import streamsSchema from "#src/schema/streams.schema.js";
-import { getStreamData } from "#src/socket-events/streams.utils.js";
+import { getStreamData } from "#src/socket-events/streams/streams.utils.js";
 import {
   generateInvalidStreamKey,
   generateStreamKey,
@@ -108,6 +108,38 @@ export async function handlePostEnd(req, res) {
     return res.status(500).send({
       success: false,
       message: "Error. Failed to end the stream."
+    });
+  }
+}
+
+export async function handleGetLiveStreams(req, res) {
+  try {
+    // Get the active streams based on the status "LIVE"
+    const liveStreams = await prisma.streams.findMany({
+      where: {
+        status: streamsSchema.status.allowedValues[1]
+      }
+    });
+
+    // Format data
+
+    const data = liveStreams.map((live, id) => {
+      return {
+        status: live.status,
+        streamerID: live.userID.toString(),
+        hlsPlayback: `${process.env.HLS_PLAYBACK_URL}/hls/${live.key}/index.m3u8`
+      };
+    });
+
+    return res.send({
+      success: true,
+      message: "Live streams retrieved successfully.",
+      liveStreams: data
+    });
+  } catch {
+    return res.status(500).send({
+      success: false,
+      message: "Error. Failed to get live streams."
     });
   }
 }

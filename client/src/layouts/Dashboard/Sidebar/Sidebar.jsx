@@ -3,8 +3,8 @@ import styles from "./Sidebar.module.scss";
 
 export default function Sidebar() {
   const navItems = [
-    { icon: "fas fa-satellite-dish", text: "Browse", link: "#" },
-    { icon: "fas fa-circle-nodes", text: "Me", link: "#" }
+    { icon: "fas fa-satellite-dish", text: "Browse", link: "/browse" },
+    { icon: "fas fa-circle-nodes", text: "Me", link: "/me" }
   ];
 
   const initializeDisplay = () => {

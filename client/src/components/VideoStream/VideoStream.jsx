@@ -4,7 +4,12 @@ import { Controls } from "./Controls/Controls.jsx";
 import StreamStatusTab from "./StreamStatusTab/StreamStatusTab.jsx";
 import styles from "./VideoStream.module.scss";
 
-export default function VideoStream({ className, status, hlsPlayback }) {
+export default function VideoStream({
+  className,
+  hideControls,
+  status,
+  hlsPlayback
+}) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   useStreamer(videoRef, hlsPlayback);
@@ -24,11 +29,14 @@ export default function VideoStream({ className, status, hlsPlayback }) {
 
       <StreamStatusTab status={status} />
 
-      <Controls
-        videoRef={videoRef}
-        status={status}
-        containerRef={containerRef}
-      />
+      {!hideControls && (
+        <Controls
+          className={styles.controls}
+          status={status}
+          videoRef={videoRef}
+          containerRef={containerRef}
+        />
+      )}
     </div>
   );
 }

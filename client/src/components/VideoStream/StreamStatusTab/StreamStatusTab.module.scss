@@ -10,13 +10,9 @@
   .OFFLINE {
     padding: 5px 10px;
     border-radius: 3px;
-    font-size: small;
+    font-size: x-small;
     user-select: none;
-    text-transform: lowercase;
-
-    &::first-letter {
-      text-transform: capitalize;
-    }
+    text-transform: uppercase;
   }
 
   .LIVE {

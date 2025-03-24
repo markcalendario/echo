@@ -4,7 +4,9 @@ import useVolume from "@/hooks/useVolume.jsx";
 import Range from "../../Range/Range.jsx";
 import styles from "./Controls.module.scss";
 
-export function Controls({ videoRef, containerRef, status }) {
+export function Controls({ className, videoRef, containerRef, status }) {
+  const classes = [styles.controls, className].filter(Boolean).join(" ");
+
   const [isPlaying, togglePlayPause] = usePlayPause(videoRef);
   const [isMuted, volume, toggleMute, changeVolume] = useVolume(videoRef);
   const [isFullscreen, expand, shrink] = useFullscreen(containerRef);
@@ -12,7 +14,7 @@ export function Controls({ videoRef, containerRef, status }) {
   if (status === "OFFLINE") return;
 
   return (
-    <div className={styles.controls}>
+    <div className={classes}>
       <div className={styles.controlGroup}>
         <PlaybackButton
           isPlaying={isPlaying}

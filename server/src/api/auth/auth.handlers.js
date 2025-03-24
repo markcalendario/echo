@@ -12,8 +12,20 @@ export async function handlePostSignUp(req, res) {
   const hashedPassword = hashPassword(password);
 
   try {
-    await prisma.users.create({
-      data: { username, email, password: hashedPassword }
+    await prisma.$transaction(async (tx) => {
+      // User Record
+      const userRecord = await tx.users.create({
+        data: { username, email, password: hashedPassword }
+      });
+
+      // Stream Record
+      await tx.streams.create({
+        data: {
+          key: "NO_KEY",
+          status: "OFFLINE",
+          userID: userRecord.id
+        }
+      });
     });
 
     return res.send({

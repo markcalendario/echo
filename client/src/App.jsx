@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LoginPage from "./pages/Auths/SignIn/SignIn.jsx";
 import SignUpPage from "./pages/Auths/SignUp/SignUp.jsx";
+import BrowsePage from "./pages/Browse/Browse.jsx";
 import Me from "./pages/Me/Me.jsx";
 
 function App() {
@@ -21,6 +22,10 @@ function App() {
           <Route
             path="/me"
             element={<Me />}
+          />
+          <Route
+            path="/browse"
+            element={<BrowsePage />}
           />
         </Routes>
       </BrowserRouter>
