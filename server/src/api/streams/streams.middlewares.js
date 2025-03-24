@@ -1,8 +1,10 @@
+import prisma from "#prisma/prisma.js";
+import { getUserIDFromAuthToken } from "#src/globals/auth/auth.utils.js";
 import Joi from "joi";
 import { isStreamKeyValid } from "./streams.utils.js";
 
-export default function validateStreamKey(req, res, next) {
-  const streamKey = req.body.name;
+export function validateStreamKey(req, res, next) {
+  const streamKey = req.body?.name;
 
   const schema = Joi.string()
     .trim()
@@ -23,4 +25,31 @@ export default function validateStreamKey(req, res, next) {
 
   req.body.name = value;
   next();
+}
+
+export async function validateGetStreamKey(req, res, next) {
+  // Check if status is LIVE
+  // Generate stream key only if OFFLINE
+
+  const userID = getUserIDFromAuthToken(req.cookies.auth);
+
+  try {
+    const stream = await prisma.streams.findUnique({
+      where: { userID: userID }
+    });
+
+    if (stream.status === "LIVE") {
+      return res.json({
+        success: false,
+        message: "You are already live. Cannot regenerate stream key."
+      });
+    }
+
+    next();
+  } catch {
+    return res.status(404).json({
+      success: false,
+      message: "Error. Failed to validate get stream key."
+    });
+  }
 }
