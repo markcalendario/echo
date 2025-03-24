@@ -1,0 +1,20 @@
+@use "../../styles/abstracts/variables-colors" as colors;
+
+.preview {
+  padding-top: 0;
+
+  .videoStream {
+    border-radius: 0;
+    aspect-ratio: 16/6;
+  }
+}
+
+.streamManager {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  button {
+    align-self: baseline;
+  }
+}

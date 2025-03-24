@@ -157,7 +157,7 @@ export async function handleGetLiveStreamers(req, res) {
 
     const data = streamers.map((streamer, id) => {
       return {
-        streamerID: streamer.id.toString(),
+        streamerID: streamer.users.id.toString(),
         username: streamer.users.username
       };
     });

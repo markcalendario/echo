@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import LoginPage from "./pages/Auths/SignIn/SignIn.jsx";
 import SignUpPage from "./pages/Auths/SignUp/SignUp.jsx";
 import BrowsePage from "./pages/Browse/Browse.jsx";
+import Echo from "./pages/Echo/Echo.jsx";
 import Me from "./pages/Me/Me.jsx";
 
 function App() {
@@ -26,6 +27,10 @@ function App() {
           <Route
             path="/browse"
             element={<BrowsePage />}
+          />
+          <Route
+            path="/echo/:streamerID"
+            element={<Echo />}
           />
         </Routes>
       </BrowserRouter>
