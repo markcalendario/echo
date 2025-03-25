@@ -1,249 +1,109 @@
 # **echo.tv**
 
-A basic Twitch clone for practice aimed to explore live streaming technologies using NGINX, RTMP, and HLS.
+A simple Twitch clone for exploring live streaming with **NGINX, RTMP, and HLS**. Users can stream via OBS or other software and watch other streams.
 
-Users can use OBS or other streaming software to start their streams by connecting to the Echo platform.
+## **Features**
 
-## Features
-
-- Low-Latency Streaming
-- Stream Authentication
-- User Authentication
-- Watch Other Users' Streams
+- Low-latency streaming
+- Stream & user authentication
+- Watch other users' live streams
 
 ---
 
-# **Full Setup Guide**
+## **Setup Guide**
 
-This guide walks you through setting up the client, server, database, and NGINX for streaming. Follow the steps carefully to ensure everything is configured correctly.
-
----
-
-## **1. Client Setup (Frontend)**
-
-The client is responsible for displaying the user interface and interacting with the backend. This step installs dependencies and starts the development server.
+### **1. Client (Frontend)**
 
 ```bash
 cd client
-npm install  # Installs all necessary frontend dependencies
-npm run dev  # Starts the client development server at a local address
+npm install
+npm run dev  # Starts the frontend at http://localhost:5173
 ```
 
----
-
-## **2. Server Setup (Backend)**
-
-The server handles business logic, API requests, and database operations. This step installs backend dependencies and starts the server.
+### **2. Server (Backend)**
 
 ```bash
 cd ../server
-npm install  # Installs all backend dependencies required for the API
-npm run dev  # Starts the backend development server to process requests
+npm install
+npm run dev  # Starts the backend at http://localhost:5174
 ```
 
----
-
-## **3. MySQL Database Setup**
-
-### **Push the Prisma Schema to the Database**
-
-Prisma is used as the ORM (Object-Relational Mapping) tool to interact with MySQL. This command ensures the database schema is correctly structured based on the defined models.
+### **3. Database (MySQL + Prisma)**
 
 ```bash
-npm run prisma:migrate:dev
+npm run prisma:migrate:dev  # Creates schema to MySQL
+npm run prisma:generate:dev  # Generates Prisma client (for intellisense)
 ```
 
-✅ **What this does:**
+### **4. NGINX for RTMP & HLS**
 
-- Creates the database if it doesn’t exist.
-- Generates tables and columns based on the Prisma schema.
-- Applies any pending migrations.
-
-### **Generate Prisma Client**
-
-The Prisma client is a JavaScript/TypeScript library that provides an intuitive way to query the database.
-
-```bash
-npm run prisma:generate:dev
-```
-
-✅ **What this does:**
-
-- Creates an optimized Prisma client for querying the database.
-- Improves developer experience with autocompletion and type safety.
-
----
-
-## **4. NGINX Setup for RTMP & HLS Streaming**
-
-NGINX is used as a media server to handle live streaming. The RTMP (Real-Time Messaging Protocol) module allows streaming video, and HLS (HTTP Live Streaming) enables adaptive playback.
-
-### **Install NGINX with RTMP Module**
-
-This step installs NGINX along with the RTMP module, which is required for handling live video streams.
+**Install NGINX with RTMP Module**
 
 ```bash
 sudo apt install nginx libnginx-mod-rtmp -y
 ```
 
-### **Modify the NGINX Configuration**
+**Configure NGINX Server**
 
-NGINX needs to be configured to support RTMP streaming. This command opens the main configuration file for editing.
+Append the RTMP block from `/configs/nginx/nginx.conf` to `nginx.conf`
 
 ```bash
-sudo nano /etc/nginx/nginx.conf
+sudo nano /etc/nginx/nginx.conf  # Add RTMP settings
 ```
 
-✅ **What to do next:**
-
-- Append the RTMP settings from `configs/nginx/nginx.conf` into this file.
-- Save and exit the editor.
-
-### **Enable HLS Configuration**
-
-HLS is required for smooth and adaptive streaming. This step copies the necessary configuration file to the correct location.
+Create an HTTP configuration for HLS and STAT
 
 ```bash
 cp configs/nginx/echo.conf /etc/nginx/sites-available/echo.conf
 ```
 
-✅ **What this does:**
-
-- Adds HLS streaming support to the NGINX server.
-- Ensures video playback works across various devices and network conditions.
-
-### **Restart NGINX to Apply Changes**
-
-Once the configurations are in place, restarting NGINX ensures that the settings take effect.
+Apply changes
 
 ```bash
 systemctl restart nginx
 ```
 
-✅ **What this does:**
+---
 
-- Reloads the updated NGINX configuration.
-- Starts handling RTMP and HLS streams immediately.
+## **How Streaming Works**
+
+1. **RTMP (Real-Time Messaging Protocol)**
+   - Used by streaming software (e.g., OBS) to send live video to a media server.
+   - Ensures a stable and low-latency connection between the broadcaster and the server.
+2. **HLS (HTTP Live Streaming)**
+   - Converts the RTMP stream into smaller video segments (.ts files).
+   - Creates a playlist (.m3u8) that allows adaptive playback on web browsers and mobile devices.
+
+Together, **RTMP handles video ingestion**, while **HLS makes it playable for viewers**.
 
 ---
 
-# **Learning Section: Understanding RTMP and HLS Streaming**
+## **What is STAT in RTMP?**
 
-Live streaming involves capturing video from a source (such as a webcam or screen recording), encoding it, and transmitting it over the internet for playback. Two key technologies that make this possible are **RTMP (Real-Time Messaging Protocol)** and **HLS (HTTP Live Streaming)**.
+**STAT** is an **RTMP status report** that provides real-time information about active streams on the RTMP server. It helps monitor stream activity, including:
 
----
+- **Current live streams**
+- **Bitrate and bandwidth usage**
+- **Connected viewers**
+- **Stream key details**
 
-## **1. What is RTMP?**
+📌 In our setup, it was used to track stream heartbeats. These heartbeats help detect streams that appear LIVE but are no longer active, ensuring they are correctly marked as OFFLINE. To check the RTMP status:
 
-RTMP (Real-Time Messaging Protocol) is a low-latency streaming protocol designed to efficiently transmit audio, video, and data over the internet. Originally developed by Macromedia (now Adobe), RTMP was widely used for live streaming before transitioning into a protocol mainly for delivering content to media servers.
+```bash
+curl http://172.23.238.4:5175/stat
+```
 
-### **How RTMP Works**
-
-1. A live streaming software (e.g., OBS Studio, vMix, Wirecast) **captures** video and audio from a source.
-2. The software **encodes** the video using a codec like H.264 and compresses the audio (e.g., AAC).
-3. The encoded stream is sent via RTMP to an **RTMP server** (e.g., NGINX with RTMP module).
-4. The RTMP server **distributes** the stream to viewers or converts it into another format like HLS for broader compatibility.
-
-✅ **Why RTMP?**
-
-- Low latency (~2-5 seconds delay)
-- Stable, persistent connection
-- Compatible with various streaming software
-
-🚨 **Limitations**
-
-- Not natively supported on most modern browsers (requires conversion to HLS or DASH)
+📌 This is useful for debugging and monitoring stream performance.
 
 ---
 
-## **2. What is HLS?**
+## **Connecting OBS to RTMP Server**
 
-HLS (HTTP Live Streaming) is a streaming protocol developed by Apple that is optimized for playback across different devices, including web browsers, smartphones, and smart TVs. It is widely used today for live and on-demand streaming.
-
-### **How HLS Works**
-
-1. The RTMP stream from the broadcaster is received by the **RTMP server** (e.g., NGINX with the RTMP module).
-2. The RTMP server **transcodes** and segments the video into small chunks (usually 2-10 seconds each).
-3. These chunks are stored as `.ts` (Transport Stream) files, and an `.m3u8` playlist file is created.
-4. The `.m3u8` file is served over HTTP, allowing users to stream the video via web browsers and media players.
-
-✅ **Why HLS?**
-
-- Works on almost all devices and browsers
-- Supports adaptive bitrate streaming (automatically adjusts video quality based on internet speed)
-- More scalable for larger audiences
-
-🚨 **Limitations**
-
-- Higher latency (~10-30 seconds delay) compared to RTMP
-- Requires additional processing power for conversion
-
----
-
-## **3. How Streaming Software Connects to an RTMP Server**
-
-Streaming software like OBS Studio, vMix, or Wirecast is used to send live video streams to an RTMP server.
-
-### **Steps to Connect OBS Studio to an RTMP Server**
-
-1. **Get the RTMP Server URL**
-   - Typically in the format:
-     ```
-     rtmp://your-server-ip/live
-     ```
-2. **Configure OBS Studio**
-   - Open **OBS Studio**
+1. **RTMP URL:** `rtmp://172.23.238.4:1935/live`
+2. **OBS Settings:**
    - Go to **Settings > Stream**
-   - Select **Custom** as the service
-   - Enter the RTMP server URL
-   - Set a **Stream Key** (e.g., `stream1`)
+   - Set **Service: Custom**
+   - Enter **RTMP URL** + **`Your Stream Key`**
 3. **Start Streaming**
-   - Click **Start Streaming** in OBS
-   - The RTMP server will now receive the video feed
 
-📌 **Example RTMP URL and Stream Key in OBS:**
-
-```
-rtmp://your-server-ip/live
-Stream Key: stream1
-```
-
-Once the RTMP server receives the stream, it can either distribute it directly to RTMP-compatible players or convert it into HLS for broader compatibility.
-
----
-
-## **4. How RTMP Converts to HLS for Web Playback**
-
-To make the stream playable in web browsers, the RTMP stream is converted into HLS:
-
-1. **NGINX with RTMP Module receives the RTMP stream**
-
-   - It listens for incoming streams and processes them.
-
-2. **NGINX segments the RTMP stream into small `.ts` files**
-
-   - These are typically 2-10 seconds long.
-
-3. **An `.m3u8` playlist file is generated**
-
-   - This file contains a list of `.ts` video segments and tells the media player how to play them.
-
-4. **Users watch the stream via an HLS-compatible player**
-   - Most web browsers, mobile devices, and video players (like VLC) support HLS.
-
-📌 **Example HLS URL:**
-
-```
-http://your-server-ip/hls/stream1.m3u8
-```
-
-A web-based video player (like Video.js) can then be used to play the stream.
-
----
-
-## **5. Key Takeaways**
-
-- **RTMP** is great for low-latency streaming and is used to send video to media servers.
-- **HLS** is better for compatibility and scalability but has higher latency.
-- Streaming software like **OBS Studio** connects to an RTMP server, which then converts the stream to HLS for web playback.
-- **NGINX with RTMP module** is commonly used for handling RTMP and converting it to HLS.
+📌 **Watch via HLS:** `http://172.23.238.4:5175/hls/Your Stream Key/index.m3u8`
