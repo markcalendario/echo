@@ -16,11 +16,12 @@ model users {
 }
 
 model streams {
-  id     BigInt         @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
-  userID BigInt         @unique(map: "userID_UNIQUE") @db.UnsignedBigInt
-  key    String         @db.Text
-  status streams_status
-  users  users          @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkStreamsUsers")
+  id        BigInt         @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.UnsignedBigInt
+  userID    BigInt         @unique(map: "userID_UNIQUE") @db.UnsignedBigInt
+  key       String         @db.Text
+  status    streams_status
+  heartbeat DateTime?      @db.DateTime(0)
+  users     users          @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fkStreamsUsers")
 }
 
 enum streams_status {
